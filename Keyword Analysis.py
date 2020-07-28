@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[156]:
+# In[1]:
 
 
 import pandas as pd
@@ -12,7 +12,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 import nltk
 
 
-# In[157]:
+# In[2]:
 
 
 # reading pickle files into pandas dataframes
@@ -22,7 +22,7 @@ SI_tweets = pd.read_pickle("./SI_tweets.pkl")
 
 # ### CountVectorizer analysis - Brooklyn
 
-# In[96]:
+# In[4]:
 
 
 from nltk.corpus import stopwords
@@ -34,7 +34,7 @@ BK_stopwords = ['www','https','https twitter','https twitter com','twitter',
                 'the protest','if you','this is','on the','to the','you re']
 
 # filtering out tweets that got fewer than 10 likes to make processing easier
-BK_tweets = BK_tweets[BK_tweets.nlikes>=10]
+BK_tweets = BK_tweets[BK_tweets.nlikes>=1]
 
 # countvectorizing BK tweets
 vectorizer = CountVectorizer(ngram_range=(1,3))
@@ -43,55 +43,48 @@ X = vectorizer.fit_transform(BK_tweets['tweet'])
 
 user_ids = list(BK_tweets['user_id'])
 
-countvec_BK = pd.DataFrame(X.toarray(),columns=vectorizer.get_feature_names())
+BK_countvec = pd.DataFrame(X.toarray(),columns=vectorizer.get_feature_names())
 
 # build df with BK user_ids and countvectorized tweets
-countvec_BK.insert(0, "user_id", user_ids, False) 
+BK_countvec.insert(0, "user_id", user_ids, False) 
 
 # import list of general stopwords
 stopwords = stopwords.words()
 
 # create list of stopwords found in the BK tweets
-stopwords = list(set(countvec_BK.columns) & set(stopwords))+BK_stopwords
+stopwords = list(set(BK_countvec.columns) & set(stopwords))+BK_stopwords
 
 # remove stopwords from countvectorized BK tweets
-countvec_BK = countvec_BK.drop(stopwords,axis=1)
+BK_countvec = BK_countvec.drop(stopwords,axis=1)
 
 
-# In[97]:
+# In[5]:
 
 
-print(countvec_BK.shape)
-countvec_BK.head()
+print(BK_countvec.shape)
+BK_countvec.head()
 
 
-# In[117]:
-
-
-pd.options.display.max_colwidth = 300
-
-BK_tweets[BK_tweets['tweet'].str.contains("officer")].tweet.shape
-
-
-# In[127]:
+# In[6]:
 
 
 pd.options.display.max_rows = 4000
 
-print('Number of BK tweets: '+str(countvec_BK.shape[0]))
-countvec_BK.iloc[:,1:].sum(axis=0).sort_values(ascending=False)[:100]
+print('Number of BK tweets: '+str(BK_countvec.shape[0]))
+BK_countvec.iloc[:,1:].sum(axis=0).sort_values(ascending=False)[:100]
 
 
 # ### CountVectorizer analysis - Staten Island
 
-# In[161]:
+# In[17]:
 
 
 from nltk.corpus import stopwords
 
 SI_stopwords = ['twitter','twitter com','https','https twitter','https twitter com',
                 'pic twitter','pic twitter com','in the','if you','you re','of the','petition http',
-                'petition http chng','http chng','http chng it']
+                'petition http chng','http chng','http chng it','www','https www','instagram',
+                'https www instagram','www instagram','www instagram com','http','instagram com']
 
 # countvectorizing SI tweets
 vectorizer = CountVectorizer(ngram_range=(1,3))
@@ -100,35 +93,53 @@ X = vectorizer.fit_transform(SI_tweets['tweet'])
 
 user_ids = list(SI_tweets['user_id'])
 
-countvec_SI = pd.DataFrame(X.toarray(),columns=vectorizer.get_feature_names())
+SI_countvec = pd.DataFrame(X.toarray(),columns=vectorizer.get_feature_names())
 
 # build df with SI user_ids and countvectorized tweets
-countvec_SI.insert(0, "user_id", user_ids, False) 
+SI_countvec.insert(0, "user_id", user_ids, False) 
 
 # import list of general stopwords
 stopwords = stopwords.words()
 
 # create list of stopwords found in the SI tweets
-stopwords = list(set(countvec_SI.columns) & set(stopwords))+SI_stopwords
+stopwords = list(set(SI_countvec.columns) & set(stopwords))+SI_stopwords
 
 # remove stopwords from countvectorized SI tweets
-countvec_SI = countvec_SI.drop(stopwords,axis=1)
+SI_countvec = SI_countvec.drop(stopwords,axis=1)
 
 
-# In[162]:
+# In[18]:
 
 
-print(countvec_SI.shape)
-countvec_SI.head()
+print(SI_countvec.shape)
+SI_countvec.head()
 
 
-# In[163]:
+# In[19]:
 
 
 pd.options.display.max_rows = 4000
 
-print('Number of SI tweets: '+str(countvec_SI.shape[0]))
-countvec_SI.iloc[:,1:].sum(axis=0).sort_values(ascending=False)[:100]
+print('Number of SI tweets: '+str(SI_countvec.shape[0]))
+SI_countvec.iloc[:,1:].sum(axis=0).sort_values(ascending=False)[:100]
+
+
+# In[20]:
+
+
+pd.options.display.max_colwidth = 300
+
+print('BK tweets')
+print('number of times \'cop\' appears: '+str(BK_tweets[BK_tweets['tweet'].str.contains(" cop ")].tweet.shape[0]+
+                                             BK_tweets[BK_tweets['tweet'].str.contains(" cops ")].tweet.shape[0]-
+                                             BK_tweets[BK_tweets['tweet'].str.contains(" cop ")][BK_tweets['tweet'].str.contains(" cops ")].shape[0]))
+print('number of times \'officer\' appears: '+str(BK_tweets[BK_tweets['tweet'].str.contains("officer")].tweet.shape[0]))
+
+print('SI tweets')
+print('number of times \'cop\' appears: '+str(SI_tweets[SI_tweets['tweet'].str.contains(" cop ")].tweet.shape[0]+
+                                             SI_tweets[SI_tweets['tweet'].str.contains(" cops ")].tweet.shape[0]-
+                                             SI_tweets[SI_tweets['tweet'].str.contains(" cop ")][SI_tweets['tweet'].str.contains(" cops ")].shape[0]))
+print('number of times \'officer\' appears: '+str(SI_tweets[SI_tweets['tweet'].str.contains("officer")].tweet.shape[0]))
 
 
 # ### TF-IDF vectorizer analysis - Brooklyn

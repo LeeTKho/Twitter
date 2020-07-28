@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[116]:
+# In[1]:
 
 
 import twint
@@ -19,63 +19,29 @@ import nltk
 from nltk.corpus import stopwords
 
 
-# ### "BLM" hashtags
+# ### CountVectorizing boroughs
 
-# In[15]:
-
-
-# reading pickle files into pandas dataframes
-blm_data = pd.read_pickle("./bk_june1_tweets.pkl")
+# In[5]:
 
 
-# In[16]:
-
-
-hashtags = blm_data.astype('str')
-hashtags = hashtags[hashtags.hashtags!="[]"].hashtags
-hashtags.head()
-
-for hash_list in hashtags:
-    print(hash_list)
-
-
-# In[122]:
-
-
-import itertools
-
-hashtag_edges = []
-for hash_list in hashtags:
-    hash_list = hash_list.rstrip(']').lstrip('[').split(',')
-    for n in range(len(hash_list)):
-        hash_list[n] = hash_list[n].rstrip('\'').lstrip(' ').lstrip('\'#')
-    combos = itertools.combinations(hash_list, 2)
-    hashtag_edges = hashtag_edges+list(combos)
-    
-len(hashtag_edges)
-
-
-# In[123]:
-
-
-for n in range(len(hashtag_edges)):
-    hashtag_edges[n] = tuple(sorted(hashtag_edges[n]))
-
-
-# ### George Floyd protest keywords
-
-# In[184]:
-
+# concatenating all manhattan searches
 
 mn = pd.DataFrame(pd.read_pickle("./mn1_tweets.pkl"))
 
 for x in range(2, 7):
     mn = pd.concat([mn,pd.read_pickle("./mn{}_tweets.pkl".format(x))])
     
-mn.shape
+# reading each borough's pandas df
+
+bk = pd.DataFrame(pd.read_pickle("./bk_tweets.pkl"))
+qn = pd.DataFrame(pd.read_pickle("./qn_tweets.pkl"))
+bx = pd.DataFrame(pd.read_pickle("./bx_tweets.pkl"))
+si = pd.DataFrame(pd.read_pickle("./si_tweets.pkl"))
+
+boroughs = [bk, qn, bx, si, mn]
 
 
-# In[185]:
+# In[10]:
 
 
 import nltk
@@ -94,14 +60,15 @@ blm_stopwords = ['www','http','https','https twitter','https twitter com','twitt
                 'going to','the same','must','we re','it was','well','out of','are all','you can',
                 'to do','will be','should be','start','saying','to get','com ca','in new']
 
-# reading pickle files into pandas dataframes
-blm_data = mn
+
+# select borough
+blm_data = bk
 
 # filtering out tweets that got fewer than 1000 likes to make processing easier
 # blm_data = blm_data[blm_data.nlikes>1000]
 
 # countvectorizing blm tweets
-vectorizer = CountVectorizer(ngram_range=(1,2))
+vectorizer = CountVectorizer()
 
 X = vectorizer.fit_transform(blm_data['tweet'])
 
@@ -122,36 +89,29 @@ stopwords = list(set(blm_countvec.columns) & set(nltk_stopwords)) +list(set(blm_
 blm_countvec = blm_countvec.drop(stopwords,axis=1)
 
 
-# In[161]:
-
-
-# print(blm_countvec.shape)
-# print(blm_countvec.head())
-pd.options.display.max_colwidth = 10000
-
-blm_data[blm_data.tweet.str.contains("trump")][["user_id","tweet"]]
-
-
-# In[186]:
+# In[11]:
 
 
 pd.options.display.max_rows = 4000
 
 print('Number of tweets: '+str(blm_countvec.shape[0]))
+
+# get 100 top keywords
 top_blm_keywords = blm_countvec.iloc[:,1:].sum(axis=0).sort_values(ascending=False)[:100]
 top_blm_keywords
 
 
-# In[187]:
+# In[12]:
 
 
 import re
 
 # reading pickle files into pandas dataframes
-blm_data = mn #pd.read_pickle("./bx_tweets.pkl")
-#blm_data = blm_data[blm_data.nlikes>600]
+blm_data = bk 
+
 blm_tweets = blm_data['tweet']
 
+# cleaning tweets - removing non-alphabetic characters and converting to lowercase
 for n in range(blm_tweets.shape[0]):
     blm_tweets.iloc[n] = re.sub(r'[^\w]', ' ', blm_tweets.iloc[n]).split(' ')
     blm_tweets.iloc[n] = [i.lower() for i in blm_tweets.iloc[n]]
@@ -160,6 +120,7 @@ for n in range(blm_tweets.shape[0]):
 # In[188]:
 
 
+# extracting top keywords from tweets
 blm_keywords = [[]]*blm_tweets.shape[0]
 blm_tweets.iloc[0]
 
@@ -172,6 +133,7 @@ for n in range(blm_tweets.shape[0]):
 
 import itertools
 
+# determining connections between keywords (i.e. seeing which keywords were used together)
 blm_keyword_edges = []
 for blm_keyword_list in blm_keywords:
     combos = itertools.combinations(blm_keyword_list, 2)
@@ -183,6 +145,7 @@ len(blm_keyword_edges)
 # In[190]:
 
 
+# creating list of all keyword connections to determine weight of edges
 for n in range(len(blm_keyword_edges)):
     blm_keyword_edges[n] = tuple(sorted(blm_keyword_edges[n]))
     
@@ -193,10 +156,14 @@ blm_keyword_edges[:5]
 
 
 import collections
+
+# counting up keyword connections to determine weight of edges
 blm_counter=collections.Counter(blm_keyword_edges)
 
-# filtering out edges with weights of less than 10
+# filtering out edges with weights of less than 10 (for bk, less than 20)
 blm_counter_fil = {key:val for key, val in blm_counter.items() if val >10}
+
+# getting final node list
 all_blm_keywords=list(set(list(sum(list(blm_counter_fil.keys()), ()))))
 len(all_blm_keywords)
 
@@ -204,6 +171,7 @@ len(all_blm_keywords)
 # In[192]:
 
 
+# creating list of weights and list of nodes for graph
 blm_weights = list(blm_counter_fil.values())
 blm_edges = list(blm_counter_fil.keys())
 
@@ -388,6 +356,8 @@ def test():
 test()
 
 
+# ### Creating JSON file
+
 # In[196]:
 
 
@@ -398,11 +368,11 @@ g = nx.Graph()
 for n in range(len(blm_edges)):
     g.add_edge(blm_edges[n][0], blm_edges[n][1], weight=blm_weights[n])
 
+# creating groups using the Louvain method
 partition = community_louvain.best_partition(g)
 
 print("blm edges")
 print(blm_edges[:5])
-
 
 def get_index(keyword):
     return(all_blm_keywords.index(keyword)+1)
@@ -436,6 +406,9 @@ print(group[:5])
 
 import json
 
+# creating json file to feed into D3 graph
+# NOTE: after creating json file, you will have to do additional cleaning to get it into the correct
+# format to feed into the D3 graph script
 node_data = {'id':id_num,'name':all_blm_keywords,'value':keyword_weight,'group':group}
 node_df = pd.DataFrame(data=node_data)
 

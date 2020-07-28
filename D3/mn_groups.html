@@ -31,7 +31,7 @@ path {
 <div id="curveSettings">
   <p>Type of curve: <span id='curveLabel'>curveCatmullRomClosed</span></p>
 </div>
-<svg width='1800' height='1800'></svg>
+<svg width='1200' height='1200'></svg>
 <script src='https://d3js.org/d3.v4.min.js'></script>
 <script>
 
@@ -64,7 +64,7 @@ var svg = d3.select('svg'),
                	.distance(function(d) { return radius(d.source.value / 2) + radius(d.target.value / 2); })
               .strength(function(d) {return 0.5; })
               )
-        .force("charge", d3.forceManyBody().strength(-3000))
+        .force("charge", d3.forceManyBody().strength(-2000))
     		.force("collide", d3.forceCollide().radius(function(d) { return radius(d.value / 2) + 2; }))
         .force("center", d3.forceCenter(width / 2, height / 2));
 
