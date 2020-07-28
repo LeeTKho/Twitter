@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+
+<style>
+
+.brooklyn_h1 {
+    text-align: right;
+    /* margin: auto; */
+    width: 600px;
+    /* padding: 10px; */
+  }
+
+.manhattan_h1 {
+    float: right;
+    /* margin: auto; */
+    width: 700px;
+    /* padding: 10px; */
+  }
+
+.brooklyn_network {
+    float: left;
+    /* position: relative; */
+    padding-bottom: 100%;
+    height: 0;
+    overflow: hidden;
+}
+
+.brooklyn_network iframe {
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.manhattan_network {
+    float: right;
+    /* position: relative; */
+    padding-bottom: 100%;
+    height: 0;
+    overflow: hidden;
+}
+
+.manhattan_network iframe {
+    position: absolute;
+    /* float: right; */
+    top:0;
+    left: 1200px;
+    width: 100%;
+    height: 100%;
+}
+</style>
+
+<div class ='brooklyn_network'>
+
+  <h1 class= 'brooklyn_h1'>Brooklyn</h1>
+
+  <iframe src="bk_groups.html" id= 'scaleFactorSettings'></iframe>
+  <iframe src="bk_groups.html" id= 'curveSettings'></iframe>
+  <iframe src='bk_groups.html' style='border:1px solid black' frameborder='0' scrolling = 'no' id = 'svg'></iframe>
+
+</div>
+
+<div class = 'manhattan_network'>
+
+  <h1 class = 'manhattan_h1'>Manhattan</h1>
+
+  <iframe src='mn_groups.html' style='border:1px solid black' frameborder='0' scrolling = 'no' id = 'svg'></iframe>
+
+</div>
+<body>
+
+<script>
+
+  var aspect_ratio = 0.4;
+  var frame_width = 100; //$('#chart_2').width();
+  var frame_height = aspect_ratio * frame_width;
+
+  width = jQuery(window).width;
+jQuery(window).resize(function(){
+    if(jQuery(window).width() != width){
+        document.getElementById('iframe_chart_1').src = document.getElementById('iframe_chart_1').src;
+        width = jQuery(window).width;
+    }
+});
+
+</script>
+
+</body>

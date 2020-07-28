@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<title>Lee Kho</title>
+<meta charset="UTF-8">
+<meta name="keywords" content="lee kho, nyu, data science, cds, center for data science,  artstruggz">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href='https://fonts.googleapis.com/css?family=Baloo Da 2' rel='stylesheet'>
+<link rel="icon" href="https://i.dlpng.com/static/png/6981128_preview.png">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+
+html,body,h1,h2,h3,h4,h5,h6 {font-family: 'Baloo Da 2';}
+.w3-sidebar {
+  z-index: 3;
+  width: 250px;
+  top: 43px;
+  bottom: 0;
+  height: inherit;
+}
+
+.profile-img{
+  margin-top: 30px;
+  width:300px; */
+  height:auto;
+  object-fit:cover;
+  border-radius:50%;
+  max-width:100%;
+}
+
+@media screen and (max-width:480px) {
+  .profile-img img {
+    display: none;
+  }
+}
+</style>
+<body>
+
+<!-- Navbar -->
+<div class="w3-top">
+  <div class="w3-bar w3-theme w3-top w3-left-align w3-large">
+    <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-teal w3-large w3-theme-l1" href="javascript:void(0)" onclick="w3_open()"><i class="fa fa-bars"></i></a>
+    <a style="color:teal" href="#" class="w3-bar-item w3-button w3-theme-l1 w3-hover-teal">home</a>
+    <!-- <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-teal">home</a> -->
+    <!-- <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-white"></a> -->
+    <!-- <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-white">News</a>
+    <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Contact</a>
+    <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-white">Clients</a>
+    <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-white">Partners</a> -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<nav class="w3-sidebar w3-bar-block w3-collapse w3-large w3-theme-l5 w3-animate-left" id="mySidebar">
+  <a href="javascript:void(0)" onclick="w3_close()" class="w3-right w3-xlarge w3-padding-large w3-hover-black w3-hide-large" title="Close Menu">
+    <i class="fa fa-remove"></i>
+  </a>
+  <h4 class="w3-bar-item"><b>menu</b></h4>
+  <a class="w3-bar-item w3-button w3-hover-teal" href="art.html">art</a>
+  <a class="w3-bar-item w3-button w3-hover-teal" target="_blank" href="https://github.com/LeeTKho">github</a>
+  <a class="w3-bar-item w3-button w3-hover-teal" target="_blank" href="https://www.linkedin.com/in/lee-kho-83b36868/">linkedin</a>
+</nav>
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- Main content: shift it to the right by 250 pixels when the sidebar is visible -->
+<div class="w3-main" style="margin-left:250px">
+
+  <div class="w3-row w3-padding-64">
+    <div class="w3-twothird w3-container">
+      <h1 class="w3-text-teal"><strong>Lee Kho</strong></h1>
+      <h2 class="w3-text-teal">Personal Webpage</h2>
+      <hr>
+      <p>Hey there! Welcome to my webpage.</p>
+      <p>I am an aspiring data scientist currently pursuing my M.S. in data science at NYU's Center for Data Science (expected graduation in May 2021). I obtained my undergraduate degree in mathematics with a minor in business from Cornell University in 2015. I enjoy data visualization, baking, watercolor painting and drawing.</p>
+      <p>Visit my <a style="color:black;"; href='https://github.com/LeeTKho' target="_blank">github</a> for data science projects and my <a style="color:black"; href='https://www.instagram.com/artstruggz/?hl=en' target="_blank">instagram</a> for art projects.</p>
+      <p> <strong> Contact: <a style="color:black " href = "mailto: ltk224@nyu.edu" target="_blank">ltk224@nyu.edu</a> </strong></p>
+    </div>
+    <div class="w3-third w3-container">
+      <!-- <p class="w3-border w3-padding-large w3-padding-32 w3-center">AD</p>
+      <p class="w3-border w3-padding-large w3-padding-64 w3-center">AD</p> -->
+      <img src="7DE9B833-809D-41B6-8512-9A8F77B4ABB1-11931-0000062CB5ECE0D0_Original.JPG" class="profile-img" />
+    </div>
+  </div>
+
+</div>
+
+<script>
+// Get the Sidebar
+var mySidebar = document.getElementById("mySidebar");
+
+// Get the DIV with overlay effect
+var overlayBg = document.getElementById("myOverlay");
+
+// Toggle between showing and hiding the sidebar, and add overlay effect
+function w3_open() {
+  if (mySidebar.style.display === 'block') {
+    mySidebar.style.display = 'none';
+    overlayBg.style.display = "none";
+  } else {
+    mySidebar.style.display = 'block';
+    overlayBg.style.display = "block";
+  }
+}
+
+// Close the sidebar with the close button
+function w3_close() {
+  mySidebar.style.display = "none";
+  overlayBg.style.display = "none";
+}
+</script>
+
+</body>
+</html>
