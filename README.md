@@ -18,3 +18,14 @@ Questions to answer:
   - June 4 - George Floyd memorial is held in Minneapolis
   - June 5 - Breonna Taylor's birthday
 4. BONUS - Hashtag network graphs!
+
+## Usage
+
+**Pulling Tweet Data**
+
+First clone this repo and navigate to the project folder. In 
+your terminal:
+```bash
+pip install -e .
+python scripts/pull_borough_tweets.py search_config/config_1.yaml
+```
