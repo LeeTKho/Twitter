@@ -25,7 +25,8 @@ BOROUGH_GEOCODES = {
 
 TIMESTAMP = datetime.now().strftime('%Y-%m-%d_%H%M%S')
 SAVE_BASE_DIR = f"../data/{TIMESTAMP}"
-TWEETS_SAVE_BASE_PATH = f"{SAVE_BASE_DIR}/{{borough_code}}_tweets.csv"
+# TWEETS_SAVE_BASE_PATH = f"{SAVE_BASE_DIR}/{{borough_code}}_tweets.csv"
+TWEETS_SAVE_BASE_PATH = f"{SAVE_BASE_DIR}/{{borough_code}}_tweets.pkl"
 CONFIG_SAVE_BASE_PATH = f"{SAVE_BASE_DIR}/search_config.yaml"
 
 
@@ -63,7 +64,8 @@ def pull_data(args):
                                              until=str(config['until']))
                                for geocode in borough_geocodes])
         logging.info(f"-- pulled {len(tweets_df)} tweets")
-        tweets_df.to_csv(save_path, index=False)
+        # tweets_df.to_csv(save_path, index=False)
+        tweets_df.to_pickle(save_path)
         logging.info(f"-- saved tweets to `{save_path}`")
         run_time = time.time() - st
         logging.info(f"-- data pull took {round(run_time/60, 2)} minutes")
