@@ -24,7 +24,7 @@ var svg = d3.select('svg'),
         .distance(function(d) { return radius(d.source.value / 2) + radius(d.target.value / 2); })
               .strength(function(d) {return 0.5; }))
       .force('charge', d3.forceManyBody().strength(document.getElementById('forcestrength').getAttribute('value')))
-      .force("collide", d3.forceCollide().radius(function(d) { return radius(d.value / 2) + 2; }))
+      .force('collide', d3.forceCollide().radius(function(d) { return radius(d.value / 2) + 2 ; }))
       .force('center', d3.forceCenter(width / 2, height / 2)),
     searchterms = ['blm', 'black lives matter', 'police', 'protest', 'riot','george floyd'];
 
@@ -137,9 +137,9 @@ d3.json(document.getElementById('graphname').getAttribute('value'), function(err
         .attr('y1', function(d) { return d.source.y; })
         .attr('x2', function(d) { return d.target.x; })
         .attr('y2', function(d) { return d.target.y; });
-    //node
-    //    .attr('cx', function(d) { return d.x; })
-    //    .attr('cy', function(d) { return d.y; });
+    node
+       .attr('cx', function(d) { return d.x; })
+       .attr('cy', function(d) { return d.y; });
 
     node
         .attr("transform", function(d) {
@@ -211,7 +211,7 @@ function dragended(d) {
 
 // drag groups
 function group_dragstarted(groupId) {
-  if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+  if (!d3.event.active) simulation.alphaTarget(0.1).restart();
   d3.select(this).select('path').style('stroke-width', 3);
 }
 
@@ -225,6 +225,6 @@ function group_dragged(groupId) {
 }
 
 function group_dragended(groupId) {
-  if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+  if (!d3.event.active) simulation.alphaTarget(0).restart();
   d3.select(this).select('path').style('stroke-width', 1);
 }

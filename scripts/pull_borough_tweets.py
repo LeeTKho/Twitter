@@ -13,7 +13,7 @@ from twitter_utils import search_tweets
 BOROUGH_GEOCODES = {
     'BK':  ['40.6451804, -73.9431988, 5.39mi'],
     'QN': ['40.739414, -73.847062, 5.68mi'],
-    'BX:': ['40.8474099, -73.8670223, 4.09mi'],
+    'BX': ['40.8474099, -73.8670223, 4.09mi'],
     'SI': ['40.5586358, -74.1347641, 6.90mi'],
     'MN': ['40.7254044, -74.0030475, 0.88mi',
            '40.7625644, -73.980033, 0.88mi',
@@ -24,7 +24,7 @@ BOROUGH_GEOCODES = {
 }
 
 TIMESTAMP = datetime.now().strftime('%Y-%m-%d_%H%M%S')
-SAVE_BASE_DIR = f"../data/{TIMESTAMP}"
+SAVE_BASE_DIR = f"./data/{TIMESTAMP}"
 # TWEETS_SAVE_BASE_PATH = f"{SAVE_BASE_DIR}/{{borough_code}}_tweets.csv"
 TWEETS_SAVE_BASE_PATH = f"{SAVE_BASE_DIR}/{{borough_code}}_tweets.pkl"
 CONFIG_SAVE_BASE_PATH = f"{SAVE_BASE_DIR}/search_config.yaml"
